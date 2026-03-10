@@ -3,16 +3,18 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.management.relation.Role;
-
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
-import seedu.address.model.person.Player;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Player;
+import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
+/**
+ * A utility class to help with building Player objects.
+ */
 public class PlayerBuilder extends PersonBuilder {
     public static final String DEFAULT_NAME = "TOMMY TAN";
     public static final String DEFAULT_PHONE = "91234567";
@@ -59,7 +61,7 @@ public class PlayerBuilder extends PersonBuilder {
     /**
      * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Player} that we are building.
      */
-    public PlayerBuilder withTags(String ... tags) {
+    public PlayerBuilder withTags(String... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
         return this;
     }
