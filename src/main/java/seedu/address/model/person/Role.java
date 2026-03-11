@@ -5,6 +5,7 @@ package seedu.address.model.person;
  */
 public enum Role {
     PLAYER, STAFF;
+    public static final String MESSAGE_CONSTRAINTS = "Role must be PLAYER or STAFF";
 
     /**
      * Returns if a given string is a valid role.
