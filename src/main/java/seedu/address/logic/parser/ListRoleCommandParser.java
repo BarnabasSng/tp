@@ -10,6 +10,8 @@ import seedu.address.model.person.Role;
  */
 public class ListRoleCommandParser implements Parser<ListRoleCommand> {
 
+    public static final String VALID_ARG_PLAYER = "players";
+    public static final String VALID_ARG_STAFF = "staff";
     public static final String MESSAGE_INVALID_ROLE =
             "Invalid command format. Use 'list' to view all, 'list players' to view players,"
             + " or 'list staff' to view staff.";
@@ -24,9 +26,9 @@ public class ListRoleCommandParser implements Parser<ListRoleCommand> {
         String trimmedArgs = args.trim().toLowerCase();
 
         switch (trimmedArgs) {
-        case "players":
+        case VALID_ARG_PLAYER:
             return new ListRoleCommand(new PersonHasRolePredicate(Role.PLAYER), "players");
-        case "staff":
+        case VALID_ARG_STAFF:
             return new ListRoleCommand(new PersonHasRolePredicate(Role.STAFF), "staff");
         default:
             throw new ParseException(MESSAGE_INVALID_ROLE);
