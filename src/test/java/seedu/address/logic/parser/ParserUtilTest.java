@@ -18,6 +18,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -26,6 +27,7 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_ROLE = "invalidRole";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
@@ -33,6 +35,8 @@ public class ParserUtilTest {
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_ROLE_1 = "PLAYER";
+    private static final String VALID_ROLE_2 = "STAFF";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -147,6 +151,34 @@ public class ParserUtilTest {
         Email expectedEmail = new Email(VALID_EMAIL);
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
     }
+
+    @Test
+    public void parseRole_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseRole((String) null));
+    }
+
+    @Test
+    public void parseRole_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseRole(INVALID_ROLE));
+    }
+
+    @Test
+    public void parseRole_validPlayer_returnsRole() throws Exception {
+        assertEquals(Role.PLAYER, ParserUtil.parseRole(VALID_ROLE_1));
+    }
+
+    @Test
+    public void parseRole_validStaff_returnsRole() throws Exception {
+        assertEquals(Role.STAFF, ParserUtil.parseRole(VALID_ROLE_2));
+    }
+
+    @Test
+    public void parseRole_validValueWithWhitespace_returnsTrimmedRole() throws Exception {
+        String roleWithWhitespace = WHITESPACE + VALID_ROLE_1 + WHITESPACE;
+        Role expectedRole = Role.valueOf(VALID_ROLE_1);
+        assertEquals(expectedRole, ParserUtil.parseRole(roleWithWhitespace));
+    }
+
 
     @Test
     public void parseTag_null_throwsNullPointerException() {
