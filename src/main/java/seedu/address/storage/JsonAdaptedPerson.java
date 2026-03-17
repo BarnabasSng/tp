@@ -30,7 +30,7 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
-    private final Role role;
+    private final String role;
 
 
     /**
@@ -47,11 +47,7 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
-        if (role == null) {
-            this.role = Role.PLAYER;
-        } else {
-            this.role = Role.valueOf(role.toUpperCase());
-        }
+        this.role = role;
     }
 
     /**
@@ -65,7 +61,7 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
-        role = source.getRole();
+        role = source.getRole().name();
     }
 
     /**
@@ -112,7 +108,17 @@ class JsonAdaptedPerson {
         final Address modelAddress = new Address(address);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return Person.createPerson(modelName, modelPhone, modelEmail, modelAddress, modelTags, role);
+
+        if (role == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Role.class.getSimpleName()));
+        }
+
+        if (!Role.isValidRole(role)) {
+            throw new IllegalValueException(Role.MESSAGE_CONSTRAINTS);
+        }
+        final Role modelRole = Role.valueOf(role.toUpperCase());
+
+        return Person.createPerson(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRole);
     }
 
 }

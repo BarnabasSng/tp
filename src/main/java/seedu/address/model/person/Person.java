@@ -30,7 +30,7 @@ public abstract class Person {
      * Every field must be present and not null. Includes role field.
      */
     protected Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Role role) {
-        requireAllNonNull(name, phone, email, address, tags);
+        requireAllNonNull(name, phone, email, address, tags, role);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -39,11 +39,22 @@ public abstract class Person {
         this.role = role;
     }
 
+    /**
+     * Factory method for creating a person.
+     *
+     * @param name
+     * @param phone
+     * @param email
+     * @param address
+     * @param tags
+     * @param role
+     * @return {@code Person}
+     */
     public static Person createPerson(Name name, Phone phone, Email email,
                                       Address address, Set<Tag> tags, Role role) {
         return switch (role) {
-            case PLAYER -> new Player(name, phone, email, address, tags);
-            case STAFF -> new Staff(name, phone, email, address, tags);
+        case PLAYER -> new Player(name, phone, email, address, tags);
+        case STAFF -> new Staff(name, phone, email, address, tags);
         };
     }
 
@@ -65,7 +76,6 @@ public abstract class Person {
 
     /**
      * Returns the role of the person.
-     * May be null if role was not specified.
      */
     public Role getRole() {
         return role;
