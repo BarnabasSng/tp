@@ -37,7 +37,7 @@ public class CommandTestUtil {
     public static final String VALID_ADDRESS_PLAYER_AMY = "Block 33, Street 34";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
-    public static final String VALID_ROLE_PLAYER = "STAFF";
+    public static final String VALID_ROLE_PLAYER = "PLAYER";
     public static final String VALID_ROLE_STAFF = "STAFF";
 
     public static final String NAME_DESC_PLAYER_BEN = " " + PREFIX_NAME + VALID_NAME_PLAYER_BEN;
