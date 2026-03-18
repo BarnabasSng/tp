@@ -33,6 +33,12 @@ public class CommandResultTest {
 
         // different exit value -> returns false
         assertFalse(commandResult.equals(new CommandResult("feedback", false, true)));
+
+        // different pending delete base command -> returns false
+        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, "delete 1", null)));
+
+        // different pending delete criteria -> returns false
+        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, null, "meier")));
     }
 
     @Test
@@ -50,6 +56,10 @@ public class CommandResultTest {
 
         // different exit value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(), new CommandResult("feedback", false, true).hashCode());
+
+        // different pending delete metadata -> returns different hashcode
+        assertNotEquals(commandResult.hashCode(),
+                new CommandResult("feedback", false, false, "delete 1", null).hashCode());
     }
 
     @Test
@@ -57,7 +67,9 @@ public class CommandResultTest {
         CommandResult commandResult = new CommandResult("feedback");
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
-                + ", exit=" + commandResult.isExit() + "}";
+                + ", exit=" + commandResult.isExit()
+                + ", pendingDeleteBaseCommand=" + commandResult.getPendingDeleteBaseCommand()
+                + ", pendingDeleteCriteria=" + commandResult.getPendingDeleteCriteria() + "}";
         assertEquals(expected, commandResult.toString());
     }
 }

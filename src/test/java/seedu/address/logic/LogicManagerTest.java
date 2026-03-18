@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -68,6 +70,46 @@ public class LogicManagerTest {
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD;
         assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+    }
+
+    @Test
+    public void execute_deleteThenYesShortInput_success() throws Exception {
+        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        logic.execute(addCommand);
+
+        Person personToDelete = model.getFilteredPersonList().get(0);
+        CommandResult promptResult = logic.execute("delete 1");
+        String expectedPrompt = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_CONFIRMATION,
+                Messages.format(personToDelete), "Y", "N", "Y", "N");
+        assertEquals(expectedPrompt, promptResult.getFeedbackToUser());
+
+        CommandResult deleteResult = logic.execute("Y");
+        String expectedDelete = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete));
+        assertEquals(expectedDelete, deleteResult.getFeedbackToUser());
+        assertTrue(model.getFilteredPersonList().isEmpty());
+    }
+
+    @Test
+    public void execute_deleteClashThenIndexThenYesShortInput_success() throws Exception {
+        logic.execute("add n/Amy Meier p/91111111 e/amy.meier@example.com a/Street 1");
+        logic.execute("add n/Bob Meier p/92222222 e/bob.meier@example.com a/Street 2");
+
+        CommandResult clashResult = logic.execute("delete meier");
+        assertTrue(clashResult.getFeedbackToUser().contains("Multiple matching players found"));
+
+        Person selectedPerson = model.getAddressBook().getPersonList().stream()
+                .filter(person -> person.getName().fullName.equals("Bob Meier"))
+                .findFirst()
+                .orElseThrow();
+
+        CommandResult selectionResult = logic.execute("2");
+        String expectedPrompt = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_CONFIRMATION,
+                Messages.format(selectedPerson), "Y", "N", "Y", "N");
+        assertEquals(expectedPrompt, selectionResult.getFeedbackToUser());
+
+        CommandResult deleteResult = logic.execute("y");
+        String expectedDelete = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(selectedPerson));
+        assertEquals(expectedDelete, deleteResult.getFeedbackToUser());
     }
 
     @Test
