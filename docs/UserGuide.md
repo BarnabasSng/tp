@@ -34,7 +34,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete 3` : Selects the 3rd contact for deletion, then confirm with `y` or `n`.
 
    * `clear` : Deletes all contacts.
 
@@ -148,17 +148,22 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes a person from the address book by list index or name keywords.
 
-Format: `delete INDEX`
+Format: `delete INDEX` or `delete KEYWORD [MORE_KEYWORDS]`
 
-* Deletes the person at the specified `INDEX`.
+* `delete INDEX` selects the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
+* `delete KEYWORD [MORE_KEYWORDS]` searches by name (same matching rules as `find`).
+* If one person matches, it will show that person and ask for confirmation.
+* If multiple persons match, it will show a clash list with indexes. Enter the clash index to choose a person.
+* To confirm or cancel deletion, type `y`/`Y` or `n`/`N`.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2`, then `y` deletes the 2nd person in the address book.
+* `delete Bernice`, then `n` cancels deletion.
+* `delete Meier`, then `2`, then `y` deletes the 2nd matched person in the clash list.
 
 ### Clearing all entries : `clear`
 
@@ -211,7 +216,7 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME r/ROLE p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho r/staff p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete INDEX` or `delete KEYWORD [MORE_KEYWORDS]`<br> e.g., `delete 3` (then `y`), `delete Bernice`, `delete Meier` (then `2`, then `y`)
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [r/ROLE] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list` / `list players` / `list staff`<br> e.g., `list players`
